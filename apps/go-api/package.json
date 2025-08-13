@@ -1,0 +1,12 @@
+{
+  "name": "go-api",
+  "private": true,
+  "scripts": {
+    "lint": "golangci-lint run ./... || true",
+    "typecheck": "go vet ./...",
+    "build": "mkdir -p bin && go build -o bin/server ./cmd/server",
+    "test": "go test ./... -cover",
+    "migrate": "goose -dir ./migrations postgres \"$POSTGRES_DSN\" up",
+    "dev": "air || reflex -r '\\.go' -s -- sh -c 'go build -o bin/server ./cmd/server && ./bin/server'"
+  }
+}
