@@ -1,7 +1,6 @@
 package http
 
 import (
-	"context"
 	"encoding/json"
 	"net/http"
 	"time"
@@ -56,18 +55,17 @@ type summarizeRes struct {
 }
 
 func (s *Server) summarize(w http.ResponseWriter, r *http.Request) {
-	ctx := r.Context()
 	var in summarizeReq
 	if err := json.NewDecoder(r.Body).Decode(&in); err != nil {
 		http.Error(w, err.Error(), 400)
 		return
 	}
-	resp, err := s.AI.SDK.Chat.Completions.New(ctx, openai.ChatCompletionNewParams{
-		Messages: openai.F([]openai.ChatCompletionMessageParamUnion{
+	resp, err := s.AI.SDK.Chat.Completions.New(r.Context(), openai.ChatCompletionNewParams{
+		Messages: []openai.ChatCompletionMessageParamUnion{
 			openai.SystemMessage("あなたは優秀な日本語の要約アシスタントです。要点を簡潔に日本語でまとめてください。"),
 			openai.UserMessage(in.Text),
-		}),
-		Model: openai.F(openai.ChatModel(s.AI.Model())),
+		},
+		Model: openai.ChatModel(s.AI.Model()),
 	})
 	if err != nil {
 		http.Error(w, err.Error(), 500)
@@ -90,7 +88,6 @@ type rewriteRes struct {
 }
 
 func (s *Server) rewrite(w http.ResponseWriter, r *http.Request) {
-	ctx := r.Context()
 	var in rewriteReq
 	if err := json.NewDecoder(r.Body).Decode(&in); err != nil {
 		http.Error(w, err.Error(), 400)
@@ -98,12 +95,12 @@ func (s *Server) rewrite(w http.ResponseWriter, r *http.Request) {
 	}
 	sys := "あなたは優秀な日本語のリライトアシスタントです。意味を変えず、指示されたトーンに書き換えてください。"
 	prompt := "トーン: " + in.Tone + "\n本文:\n" + in.Text
-	resp, err := s.AI.SDK.Chat.Completions.New(ctx, openai.ChatCompletionNewParams{
-		Messages: openai.F([]openai.ChatCompletionMessageParamUnion{
+	resp, err := s.AI.SDK.Chat.Completions.New(r.Context(), openai.ChatCompletionNewParams{
+		Messages: []openai.ChatCompletionMessageParamUnion{
 			openai.SystemMessage(sys),
 			openai.UserMessage(prompt),
-		}),
-		Model: openai.F(openai.ChatModel(s.AI.Model())),
+		},
+		Model: openai.ChatModel(s.AI.Model()),
 	})
 	if err != nil {
 		http.Error(w, err.Error(), 500)

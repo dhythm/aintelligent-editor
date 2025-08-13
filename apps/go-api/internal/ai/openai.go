@@ -11,7 +11,8 @@ type Client struct {
 }
 
 func New() *Client {
-	return &Client{SDK: openai.NewClient()}
+	client := openai.NewClient()
+	return &Client{SDK: &client}
 }
 
 func (c *Client) Model() string {
