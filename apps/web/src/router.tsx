@@ -7,6 +7,7 @@ const DocumentsPage = lazy(() => import('./pages/DocumentsPage'))
 const SettingsPage = lazy(() => import('./pages/SettingsPage'))
 const TemplatesPage = lazy(() => import('./pages/TemplatesPage'))
 const VersionsPage = lazy(() => import('./pages/VersionsPage'))
+const DocumentEditor = lazy(() => import('./pages/DocumentEditor').then(module => ({ default: module.DocumentEditor })))
 
 function withSuspense(Component: React.ComponentType) {
   return (
@@ -24,6 +25,14 @@ export const router = createBrowserRouter([
   {
     path: '/documents',
     element: withSuspense(DocumentsPage),
+  },
+  {
+    path: '/editor',
+    element: withSuspense(DocumentEditor),
+  },
+  {
+    path: '/documents/:documentId/edit',
+    element: withSuspense(DocumentEditor),
   },
   {
     path: '/settings',

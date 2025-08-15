@@ -133,7 +133,7 @@ export default function DocumentsPage() {
                 <Settings className="h-4 w-4" />
               </Button>
             </Link>
-            <Link to="/">
+            <Link to="/editor">
               <Button>
                 <Plus className="h-4 w-4 mr-2" />
                 新しい文書
@@ -210,7 +210,7 @@ export default function DocumentsPage() {
                 ? "検索条件に一致する文書がありません。フィルターを変更してみてください。"
                 : "まだ文書がありません。新しい文書を作成して始めましょう。"}
             </p>
-            <Link to="/">
+            <Link to="/editor">
               <Button>
                 <Plus className="h-4 w-4 mr-2" />
                 新しい文書を作成
@@ -232,7 +232,7 @@ export default function DocumentsPage() {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem asChild>
-                          <Link to="/" className="flex items-center">
+                          <Link to={`/documents/${doc.id}/edit`} className="flex items-center">
                             <Edit3 className="h-4 w-4 mr-2" />
                             開く
                           </Link>
